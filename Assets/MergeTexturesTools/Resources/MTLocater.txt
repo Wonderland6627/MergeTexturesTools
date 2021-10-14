@@ -1,0 +1,2 @@
+Locate 'MergeTexturesTools' dir.
+Do not delete!
