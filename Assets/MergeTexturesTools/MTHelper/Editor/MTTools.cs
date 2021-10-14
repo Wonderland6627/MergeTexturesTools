@@ -4,36 +4,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 using System.Runtime.InteropServices;
 using System.Text;
 
 //b*[^:b#/]+.*$
 public class MTTools
 {
+    public static string MergeTexturesToolsPathPrefix()
+    {
+        return Path.Combine(Application.dataPath , "MergeTexturesTools");
+    }
 
     //贴图输出路径
     public static string TexOutputPath(string texName, TextureSuffix texSuffix)
     {
-        return Path.Combine(Application.dataPath + "/MergeTexturesTools/Output", texName) + "." + texSuffix.ToString().ToLower();
-    }
-
-    //配置存档保存路径
-    public static string ConfigJsonPath(string configName)
-    {
-        return Path.Combine(Application.dataPath + "/MergeTexturesTools/Configs", configName) + ".json";
-    }
-
-    private static string CombinePath(params string[] path)
-    {
-        return string.Join(Path.DirectorySeparatorChar + "", path);
+        return string.Format("{0}/Output/{1}.{2}", MergeTexturesToolsPathPrefix(), texName, texSuffix.ToString().ToLower());
     }
 
     public static void MakeSureDirExists()
     {
         bool created = false;
 
-        string texOutDirPath = Path.Combine(Application.dataPath, "MergeTexturesTools/Output");
+        string texOutDirPath = string.Format("{0}/Output", MergeTexturesToolsPathPrefix());
         if (!Directory.Exists(texOutDirPath))
         {
             Directory.CreateDirectory(texOutDirPath);
@@ -54,127 +47,127 @@ public class MTTools
         }
     }
 
-    public static void SaveMergeConfigInfoJson(MergeConfig mergeConfig)
-    {
-        MTSystemTools.DisplayProgressBar(title: "检查合并配置");
+    //public static void SaveMergeConfigInfoJson(MergeConfig mergeConfig)
+    //{
+    //    MTSystemTools.DisplayProgressBar(title: "检查合并配置");
 
-        if (mergeConfig.modelMergeConfigsList == null)
-        {
-            Debug.Log("无需要合并的贴图配置信息");
-            MTSystemTools.DisplayProgressBar(false);
+    //    if (mergeConfig.modelMergeConfigsList == null)
+    //    {
+    //        Debug.Log("无需要合并的贴图配置信息");
+    //        MTSystemTools.DisplayProgressBar(false);
 
-            return;
-        }
+    //        return;
+    //    }
 
-        if (mergeConfig.newTextureName == null)
-        {
-            Debug.Log("请输入新贴图名称");
-            MTSystemTools.DisplayProgressBar(false);
+    //    if (mergeConfig.newTextureName == null)
+    //    {
+    //        Debug.Log("请输入新贴图名称");
+    //        MTSystemTools.DisplayProgressBar(false);
 
-            return;
-        }
+    //        return;
+    //    }
 
-        string configName = mergeConfig.newTextureName;
-        string configPath = ConfigJsonPath(configName);
-        MTMergeConfigSerializationInfo serializationInfo = new MTMergeConfigSerializationInfo();
+    //    string configName = mergeConfig.newTextureName;
+    //    string configPath = ConfigJsonPath(configName);
+    //    MTMergeConfigSerializationInfo serializationInfo = new MTMergeConfigSerializationInfo();
 
-        serializationInfo.textureWidth = mergeConfig.textureWidth;
-        serializationInfo.textureName = mergeConfig.newTextureName;
-        serializationInfo.textureSuffix = (int)mergeConfig.newTextureSuffix;
-        if (mergeConfig.modelMergeConfigsList.Count != 0)
-        {
-            var modelInfosList = new List<MTMergeConfigSerializationInfo.ModelMergeConfigSerializationInfo>();
-            for (int i = 0; i < mergeConfig.modelMergeConfigsList.Count; i++)
-            {
-                var config = mergeConfig.modelMergeConfigsList[i];
-                var info = new MTMergeConfigSerializationInfo.ModelMergeConfigSerializationInfo();
+    //    serializationInfo.textureWidth = mergeConfig.textureWidth;
+    //    serializationInfo.textureName = mergeConfig.newTextureName;
+    //    serializationInfo.textureSuffix = (int)mergeConfig.newTextureSuffix;
+    //    if (mergeConfig.modelMergeConfigsList.Count != 0)
+    //    {
+    //        var modelInfosList = new List<MTMergeConfigSerializationInfo.ModelMergeConfigSerializationInfo>();
+    //        for (int i = 0; i < mergeConfig.modelMergeConfigsList.Count; i++)
+    //        {
+    //            var config = mergeConfig.modelMergeConfigsList[i];
+    //            var info = new MTMergeConfigSerializationInfo.ModelMergeConfigSerializationInfo();
 
-                /*if (config.gameObject != null)
-                {
-                    string goAssetPath = AssetDatabase.GetAssetPath(config.gameObject);
-                    if (!string.IsNullOrEmpty(goAssetPath))
-                    {
-                        info.gameObjectPath = goAssetPath;
-                    }
-                    else//是场景内物体
-                    {
-                        info.gameObjectPath = "^" + config.gameObject.name;
-                    }
-                }*/
-                if (config.mesh != null)
-                {
-                    info.meshPath = AssetDatabase.GetAssetPath(config.mesh);
-                }
-                if (config.mainTexture != null)
-                {
-                    info.texturePath = AssetDatabase.GetAssetPath(config.mainTexture);
-                }
-                info.originX = (int)config.origin.x;
-                info.originY = (int)config.origin.y;
+    //            /*if (config.gameObject != null)
+    //            {
+    //                string goAssetPath = AssetDatabase.GetAssetPath(config.gameObject);
+    //                if (!string.IsNullOrEmpty(goAssetPath))
+    //                {
+    //                    info.gameObjectPath = goAssetPath;
+    //                }
+    //                else//是场景内物体
+    //                {
+    //                    info.gameObjectPath = "^" + config.gameObject.name;
+    //                }
+    //            }*/
+    //            if (config.mesh != null)
+    //            {
+    //                info.meshPath = AssetDatabase.GetAssetPath(config.mesh);
+    //            }
+    //            if (config.mainTexture != null)
+    //            {
+    //                info.texturePath = AssetDatabase.GetAssetPath(config.mainTexture);
+    //            }
+    //            info.originX = (int)config.origin.x;
+    //            info.originY = (int)config.origin.y;
 
-                modelInfosList.Add(info);
-            }
+    //            modelInfosList.Add(info);
+    //        }
 
-            serializationInfo.modelMergeConfigSerializationInfosList = modelInfosList;
-        }
+    //        serializationInfo.modelMergeConfigSerializationInfosList = modelInfosList;
+    //    }
 
-        string json = JsonConvert.SerializeObject(serializationInfo);
-        File.WriteAllText(configPath, json, Encoding.UTF8);
-        Debug.Log("保存配置：" + configPath);
+    //    string json = JsonConvert.SerializeObject(serializationInfo);
+    //    File.WriteAllText(configPath, json, Encoding.UTF8);
+    //    Debug.Log("保存配置：" + configPath);
 
-        MTSystemTools.DisplayProgressBar(false);
-        AssetDatabase.Refresh();
-    }
+    //    MTSystemTools.DisplayProgressBar(false);
+    //    AssetDatabase.Refresh();
+    //}
 
-    public static MTMergeConfigSerializationInfo LoadMergeConfigInfoJson(string jsonName)
-    {
-        MTMergeConfigSerializationInfo serializationInfo = new MTMergeConfigSerializationInfo();
+    //public static MTMergeConfigSerializationInfo LoadMergeConfigInfoJson(string jsonName)
+    //{
+    //    MTMergeConfigSerializationInfo serializationInfo = new MTMergeConfigSerializationInfo();
 
 
 
-        return serializationInfo;
-    }
+    //    return serializationInfo;
+    //}
 }
 
 /// <summary>
 /// 用于读写配置存档
 /// </summary>
-public class MTMergeConfigSerializationInfo
-{
-    public string appointBGTexturePath;
+//public class MTMergeConfigSerializationInfo
+//{
+//    public string appointBGTexturePath;
 
-    public int textureWidth;
-    public string textureName;
-    public int textureSuffix;
-    public List<ModelMergeConfigSerializationInfo> modelMergeConfigSerializationInfosList;
+//    public int textureWidth;
+//    public string textureName;
+//    public int textureSuffix;
+//    public List<ModelMergeConfigSerializationInfo> modelMergeConfigSerializationInfosList;
 
-    public class ModelMergeConfigSerializationInfo
-    {
-        public string gameObjectPath;
-        public string meshPath;
-        public string texturePath;
-        public int originX;
-        public int originY;
+//    public class ModelMergeConfigSerializationInfo
+//    {
+//        public string gameObjectPath;
+//        public string meshPath;
+//        public string texturePath;
+//        public int originX;
+//        public int originY;
 
-        public ModelMergeConfigSerializationInfo()
-        {
-            gameObjectPath = "";
-            meshPath = "";
-            texturePath = "";
-            originX = 0;
-            originY = 0;
-        }
-    }
+//        public ModelMergeConfigSerializationInfo()
+//        {
+//            gameObjectPath = "";
+//            meshPath = "";
+//            texturePath = "";
+//            originX = 0;
+//            originY = 0;
+//        }
+//    }
 
-    public MTMergeConfigSerializationInfo()
-    {
-        appointBGTexturePath = "";
-        textureWidth = 0;
-        textureName = "";
-        textureSuffix = 0;
-        modelMergeConfigSerializationInfosList = new List<ModelMergeConfigSerializationInfo>();
-    }
-}
+//    public MTMergeConfigSerializationInfo()
+//    {
+//        appointBGTexturePath = "";
+//        textureWidth = 0;
+//        textureName = "";
+//        textureSuffix = 0;
+//        modelMergeConfigSerializationInfosList = new List<ModelMergeConfigSerializationInfo>();
+//    }
+//}
 
 public class MTMergeTools
 {
