@@ -483,7 +483,8 @@ public class MTCursorTools
     /// </summary>
     private static string CursorPath(string fileName)
     {
-        return Path.Combine(Application.streamingAssetsPath + "/Cursors", fileName) + ".cur";
+        return string.Format("{0}/Resources/Cursors/{1}.cur", MTTools.MergeTexturesToolsPathPrefix(), fileName);
+        //return Path.Combine(Application.streamingAssetsPath + "/Cursors", fileName) + ".cur";
     }
 
     /// <summary>
