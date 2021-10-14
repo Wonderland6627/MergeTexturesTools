@@ -58,3 +58,10 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# MTTools ignore
+/Assets/Scenes
+/Assets/Scenes.meta
+/Assets/Res
+/Assets/Res.meta
+/Assets/MergeTexturesTools/Output
+/Assets/MergeTexturesTools/Output.meta

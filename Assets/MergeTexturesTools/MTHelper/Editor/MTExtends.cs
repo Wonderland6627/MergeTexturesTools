@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
@@ -33,4 +34,17 @@ public static class MTExtends
 
     //    return items;
     //}
+
+    public class Horizontal : IDisposable
+    {
+        public Horizontal()
+        {
+            GUILayout.BeginHorizontal();
+        }
+
+        public void Dispose()
+        {
+            GUILayout.EndHorizontal();
+        }
+    }
 }
