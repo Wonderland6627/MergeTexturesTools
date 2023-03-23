@@ -43,7 +43,7 @@ public class MTStartUpWindow : EditorWindow
     [MenuItem("Wonderland6627/OpenStartUpPage", priority = ((int)MTLevel.Zero))]
     public static void OpenStartUpPage()
     {
-        targetWindow = GetWindow<MTStartUpWindow>(true);
+        // targetWindow = GetWindow<MTStartUpWindow>(true);
     }
 
     private void OnEnable()
