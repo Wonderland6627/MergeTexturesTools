@@ -445,6 +445,8 @@ public class MTSystemTools
 
 public class MTCursorTools
 {
+#if UNITY_EDITOR_WIN
+    
     //光标资源加载函数  
     //fileName为加载路径下的.cur文件  
     [DllImport("User32.DLL")]
@@ -478,6 +480,8 @@ public class MTCursorTools
     public const uint SPI_SETCURSORS = 87;
     public const uint SPIF_SENDWININICHANGE = 2;
 
+#endif
+
     /// <summary>
     /// 把准备好的.cur指针资源放在StreamingAssets/Cursors下
     /// </summary>
@@ -492,7 +496,9 @@ public class MTCursorTools
     /// </summary>
     public static void Reset2NormalCursor()
     {
+#if UNITY_EDITOR_WIN
         SystemParametersInfo(SPI_SETCURSORS, 0, IntPtr.Zero, SPIF_SENDWININICHANGE);
+#endif
     }
 
     /// <summary>
@@ -500,8 +506,10 @@ public class MTCursorTools
     /// </summary>
     public static void SetDragCursor()
     {
+#if UNITY_EDITOR_WIN
         IntPtr hcur_drag = LoadCursorFromFile(CursorPath("aero_move"));
         SetSystemCursor(hcur_drag, OCR_NORMAL);
+#endif
     }
 
     /// <summary>
@@ -509,7 +517,9 @@ public class MTCursorTools
     /// </summary>
     public static void SetResizeCursor()
     {
+#if UNITY_EDITOR_WIN
         IntPtr hcur_drag = LoadCursorFromFile(CursorPath("aero_ns"));
         SetSystemCursor(hcur_drag, OCR_NORMAL);
+#endif
     }
 }
